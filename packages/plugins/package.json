@@ -5,7 +5,9 @@
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -59,7 +61,9 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@feather-scroll/core": "workspace:*"
   },
@@ -67,5 +71,14 @@
     "@feather-scroll/core": "workspace:*",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xShiroeNguyenx/feather-scroll.git",
+    "directory": "packages/plugins"
+  },
+  "homepage": "https://github.com/xShiroeNguyenx/feather-scroll#readme",
+  "bugs": {
+    "url": "https://github.com/xShiroeNguyenx/feather-scroll/issues"
   }
 }

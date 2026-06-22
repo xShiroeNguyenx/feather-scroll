@@ -28,10 +28,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+
+      # Auth tường minh: ghi token vào .npmrc để pnpm chắc chắn đọc được
+      # (pnpm không tự đọc NODE_AUTH_TOKEN như npm). Fail sớm nếu chưa set secret.
+      - name: Cấu hình npm auth
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${NPM_TOKEN:-}" ]; then
+            echo "::error::Chưa có secret NPM_TOKEN. Thêm tại Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+          echo "Kiểm tra đăng nhập npm:"
+          pnpm whoami
 
       - name: Resolve version từ tag hoặc input
         id: ver
@@ -56,5 +70,4 @@ jobs:
       - name: Publish lên npm
         run: pnpm -r --filter "./packages/**" publish --access public --no-git-checks --provenance
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

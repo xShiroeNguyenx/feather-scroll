@@ -5,7 +5,9 @@
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -19,7 +21,9 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@feather-scroll/core": "workspace:*",
     "vue": ">=3.2"
@@ -29,5 +33,14 @@
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
     "vue": "^3.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xShiroeNguyenx/feather-scroll.git",
+    "directory": "packages/adapters/vue"
+  },
+  "homepage": "https://github.com/xShiroeNguyenx/feather-scroll#readme",
+  "bugs": {
+    "url": "https://github.com/xShiroeNguyenx/feather-scroll/issues"
   }
 }

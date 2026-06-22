@@ -4,8 +4,13 @@
   "description": "FeatherScroll core engine — zero-dependency carousel/scroll.",
   "license": "MIT",
   "type": "module",
-  "sideEffects": ["*.css"],
-  "files": ["dist", "styles"],
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "styles"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,9 +29,25 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["carousel", "slider", "scroll", "swipe", "lightweight", "zero-dependency"],
+  "keywords": [
+    "carousel",
+    "slider",
+    "scroll",
+    "swipe",
+    "lightweight",
+    "zero-dependency"
+  ],
   "devDependencies": {
     "tsup": "^8.0.2",
     "typescript": "^5.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xShiroeNguyenx/feather-scroll.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/xShiroeNguyenx/feather-scroll#readme",
+  "bugs": {
+    "url": "https://github.com/xShiroeNguyenx/feather-scroll/issues"
   }
 }
