@@ -1,0 +1,60 @@
+name: Publish to npm
+
+# Phát hành khi push tag dạng v1.2.3 (vd: git tag v0.2.0 && git push origin v0.2.0).
+# Hoặc chạy tay từ tab Actions với input version.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version cần publish (vd: 0.2.0)'
+        required: true
+
+permissions:
+  contents: read
+  id-token: write # cho phép npm provenance
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Resolve version từ tag hoặc input
+        id: ver
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            V="${{ github.event.inputs.version }}"
+          else
+            V="${GITHUB_REF_NAME#v}"
+          fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "→ Publishing version $V"
+
+      - name: Đồng bộ version cho mọi package
+        run: pnpm -r exec npm version "${{ steps.ver.outputs.version }}" --no-git-tag-version --allow-same-version
+
+      # Gate: chỉ publish khi build + test xanh.
+      - run: pnpm build
+      - run: pnpm test
+
+      # pnpm tự thay "workspace:*" bằng version thật và publish theo thứ tự phụ thuộc.
+      - name: Publish lên npm
+        run: pnpm -r --filter "./packages/**" publish --access public --no-git-checks --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
