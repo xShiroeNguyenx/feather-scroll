@@ -58,10 +58,11 @@ jobs:
             -e "s#\"/packages/#\"/$BASE/packages/#g" \
             -e "s#'/packages/#'/$BASE/packages/#g"
 
-          # Trang gốc redirect sang hub demo.
+          # Trang gốc redirect sang hub demo (favicon dùng %27 thay cho ' để vừa printf).
           printf '%s\n' \
             '<!doctype html><meta charset="utf-8">' \
             '<title>FeatherScroll — Demos</title>' \
+            '<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🪶</text></svg>">' \
             '<meta http-equiv="refresh" content="0; url=./examples/">' \
             '<link rel="canonical" href="./examples/">' \
             '<p>Đang chuyển tới <a href="./examples/">FeatherScroll Demos</a>…</p>' \
