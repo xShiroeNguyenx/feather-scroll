@@ -17,9 +17,10 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # Build trước: adapters/effects/presets/test import lẫn nhau qua "dist" (checkout sạch chưa có).
+      - run: pnpm build
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
-      - run: pnpm build
       # size-limit chỉ theo dõi/cảnh báo — không chặn release (quyết định đã chốt)
       - run: pnpm size || echo "::warning::bundle vượt mục tiêu (không chặn build)"

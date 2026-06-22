@@ -1,7 +1,16 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    // Typecheck resolve các package nội bộ thẳng từ source, không phụ thuộc dist đã build
+    // (CI checkout sạch chưa có dist). Chỉ áp cho lệnh `tsc -p tsconfig.json`, không đụng build.
+    "baseUrl": ".",
+    "paths": {
+      "@feather-scroll/core": ["packages/core/src/index.ts"],
+      "@feather-scroll/effects": ["packages/effects/src/index.ts"],
+      "@feather-scroll/plugins": ["packages/plugins/src/index.ts"],
+      "@feather-scroll/presets": ["packages/presets/src/index.ts"]
+    }
   },
   "include": ["packages/*/src/**/*.ts", "packages/adapters/*/src/**/*.ts"]
 }
