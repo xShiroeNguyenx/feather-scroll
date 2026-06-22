@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Vertical ticker</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      { "imports": { "@feather-scroll/core": "/packages/core/dist/index.js" } }
+    </script>
+    <style>
+      #ticker {
+        background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+        padding: 0 1rem; max-width: 620px;
+      }
+      #ticker .fs__viewport { height: 52px; }
+      .news { height: 100%; display: flex; align-items: center; gap: .7rem; }
+      .news .badge {
+        background: var(--accent); color: #fff; font-size: .7rem; font-weight: 800;
+        padding: .15rem .5rem; border-radius: 6px; text-transform: uppercase; flex-shrink: 0;
+      }
+      .news .txt { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: .95rem; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>📰 Vertical news ticker</h1>
+        <p class="lead">Bảng tin một dòng cuộn dọc, tự đổi tin — đặt ở đầu trang hoặc thanh thông báo.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">axis: 'vertical'</span><span class="tag">items 1</span>
+          <span class="tag">loop</span><span class="tag">autoplay</span><span class="tag">drag dọc</span>
+        </div>
+      </div>
+
+      <div id="ticker"></div>
+
+      <p class="note">Chỉ cần đặt <code>axis: 'vertical'</code> — toàn bộ logic chuyển trục theo chiều dọc, kể cả kéo/swipe.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+
+      const news = [
+        ['Mới', 'Phát hành phiên bản 1.0 với 105 hiệu ứng layout'],
+        ['Hot', 'Giảm 40% kích thước bundle so với bản trước'],
+        ['Blog', 'Hướng dẫn chuyển từ owl-carousel trong 10 phút'],
+        ['Sự kiện', 'Webinar: xây carousel hiệu năng cao cho mobile'],
+        ['Mẹo', 'Dùng renderMode "native" cho danh sách ảnh siêu nhẹ'],
+        ['Cộng đồng', 'Hơn 50 hiệu ứng mới do người dùng đóng góp'],
+        ['Mới', 'Wrapper chính thức cho Vue 3 và Svelte'],
+        ['Cập nhật', 'A11y: hỗ trợ đầy đủ bàn phím và reduced-motion'],
+      ];
+      document.getElementById('ticker').innerHTML = news
+        .map(([b, t]) => `<div class="news"><span class="badge">${b}</span><span class="txt">${t}</span></div>`)
+        .join('');
+
+      new Carousel('#ticker', {
+        axis: 'vertical', items: 1, loop: true, drag: true, nav: false, dots: false,
+        speed: 500, easing: 'easeInOut',
+        autoplay: { delay: 2600, pauseOnHover: true },
+      });
+    </script>
+  </body>
+</html>

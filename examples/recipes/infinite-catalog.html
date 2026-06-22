@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Infinite catalog (virtual + wheel)</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js",
+          "@feather-scroll/presets": "/packages/presets/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #cat { padding: 0 4px; }
+      #cat .fs__viewport { height: 240px; }
+      .pcard {
+        height: 100%; background: var(--card); border: 1px solid var(--line);
+        border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column;
+      }
+      .pcard .thumb { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; font-size: 2.4rem; }
+      .pcard .body { padding: .6rem .8rem .8rem; }
+      .pcard .name { font-weight: 700; font-size: .85rem; }
+      .pcard .price { font-weight: 800; font-size: .95rem; margin-top: .15rem; }
+      .meta { margin-top: 10px; font-size: .85rem; color: #6b7280; }
+      .g0 { background: linear-gradient(135deg,#eef2ff,#c7d2fe); }
+      .g1 { background: linear-gradient(135deg,#fef3c7,#fcd34d); }
+      .g2 { background: linear-gradient(135deg,#dcfce7,#86efac); }
+      .g3 { background: linear-gradient(135deg,#fce7f3,#f9a8d4); }
+      .g4 { background: linear-gradient(135deg,#e0f2fe,#7dd3fc); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>♾️ Infinite catalog (virtual + wheel)</h1>
+        <p class="lead">Danh mục <b>500 sản phẩm</b> cuộn ngang: chỉ render phần quanh khung nhìn (content windowing), lăn chuột để duyệt, kéo trớn momentum.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">preset freeShelf</span><span class="tag">plugin virtual</span>
+          <span class="tag">plugin mousewheel</span><span class="tag">dragFree</span>
+        </div>
+      </div>
+
+      <div id="cat"></div>
+      <p class="meta" id="meta">Đang render: …</p>
+
+      <p class="note">Cuộn/kéo và mở DevTools: các thẻ ngoài cửa sổ bị gỡ nội dung (<code>data-fs-virtual="off"</code>) để giảm chi phí paint/layout.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { freeShelf } from '@feather-scroll/presets';
+      import { virtual, mousewheel } from '@feather-scroll/plugins';
+
+      const N = 500;
+      const icons = ['🎧','⌨️','🖱️','🔊','📷','💡','💻','💾','🔌','🎮'];
+      const root = document.getElementById('cat');
+      let html = '';
+      for (let i = 0; i < N; i++) {
+        html += `
+          <article class="pcard">
+            <div class="thumb g${i % 5}">${icons[i % icons.length]}</div>
+            <div class="body">
+              <div class="name">Sản phẩm #${i + 1}</div>
+              <div class="price">${(99 + (i % 40) * 25)}.000₫</div>
+            </div>
+          </article>`;
+      }
+      root.innerHTML = html;
+
+      const c = new Carousel('#cat', {
+        ...freeShelf({ gap: 12 }),
+        plugins: [virtual({ overscan: 3 }), mousewheel({ mode: 'free' })],
+      });
+
+      const meta = document.getElementById('meta');
+      const updateMeta = () => {
+        const live = c.slides.filter((s) => !s.hasAttribute('data-fs-virtual')).length;
+        meta.textContent = `Đang render nội dung: ${live} / ${N} thẻ (số còn lại đã gỡ tạm).`;
+      };
+      c.on('change', updateMeta);
+      c.on('scroll', updateMeta);
+      updateMeta();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FeatherScroll — Playground (chỉnh hiệu ứng trực tiếp)</title>
+    <link rel="stylesheet" href="../../packages/core/styles/core.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/effects": "/packages/effects/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body { font-family: system-ui, sans-serif; margin: 0; background: #0b1020; color: #e6eaf2; }
+      a { color: #38bdf8; }
+      .top { padding: 1rem 1.5rem; border-bottom: 1px solid #1e2740; }
+      .top h1 { font-size: 1.15rem; margin: 0 0 .15rem; }
+      .top .sub { color: #94a3b8; font-size: .85rem; }
+      .layout { display: grid; grid-template-columns: 320px 1fr; gap: 0; min-height: calc(100vh - 64px); }
+      .panel { padding: 1rem 1.25rem; border-right: 1px solid #1e2740; overflow: auto; max-height: calc(100vh - 64px); }
+      .stage { padding: 1.5rem; }
+      .row { margin-bottom: .8rem; }
+      .row label { display: block; font-size: .8rem; color: #b6c0d4; margin-bottom: .25rem; }
+      .row .val { color: #38bdf8; font-variant-numeric: tabular-nums; }
+      select, input[type=number] { width: 100%; background: #0b1020; color: #e6eaf2; border: 1px solid #2a3450; border-radius: 8px; padding: .4rem .5rem; }
+      input[type=range] { width: 100%; }
+      .checks { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+      .checks label { display: inline-flex; align-items: center; gap: .35rem; font-size: .85rem; color: #e6eaf2; cursor: pointer; }
+      .btns { display: flex; flex-wrap: wrap; gap: .4rem; margin: .6rem 0; }
+      .btn { background: #334155; color: #fff; border: 0; padding: .45rem .7rem; border-radius: 8px; cursor: pointer; font-size: .85rem; }
+      .btn.primary { background: #4f46e5; }
+      h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: #64748b; margin: 1.2rem 0 .5rem; border-top: 1px solid #1e2740; padding-top: .8rem; }
+      #carousel .fs__viewport { height: 460px; border-radius: 16px; background: #000; }
+      /* Let the track fill the viewport so track-layout (multi-item) slides get height too. */
+      #carousel .fs__track { height: 100%; }
+      .slide { position: relative; height: 100%; }
+      .slide .layer { position: absolute; inset: 0; }
+      .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .slide .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1rem 1.2rem; font-size: 1.3rem; font-weight: 700; text-shadow: 0 2px 12px #000; background: linear-gradient(transparent, rgba(0,0,0,.6)); }
+      code { display: block; white-space: pre; overflow: auto; background: #0d1326; border: 1px solid #1e2740; border-radius: 10px; padding: .8rem 1rem; font-size: .8rem; margin-top: 1rem; }
+      .builder { display: none; }
+      .builder.show { display: block; }
+      .hint { font-size: .78rem; color: #64748b; margin-top: .3rem; }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <h1>🪶 FeatherScroll — Playground</h1>
+      <div class="sub">Chỉnh mọi tham số trực tiếp, hoặc tự dựng hiệu ứng bằng slider. · <a href="../">← tất cả demo</a> · <a href="../showcase/">Showcase 105 →</a></div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="row">
+          <label>Hiệu ứng <span class="val" id="fxCount"></span></label>
+          <select id="effect"></select>
+        </div>
+
+        <div class="builder" id="builder">
+          <h3>🎛️ Custom effect builder</h3>
+          <div class="row"><label>translateX <span class="val" id="txV"></span>%</label><input type="range" id="tx" min="-150" max="150" value="60" /></div>
+          <div class="row"><label>translateZ <span class="val" id="tzV"></span>px</label><input type="range" id="tz" min="-600" max="200" value="0" /></div>
+          <div class="row"><label>rotateY <span class="val" id="ryV"></span>°</label><input type="range" id="ry" min="-180" max="180" value="-45" /></div>
+          <div class="row"><label>rotateX <span class="val" id="rxV"></span>°</label><input type="range" id="rx" min="-180" max="180" value="0" /></div>
+          <div class="row"><label>scale <span class="val" id="scV"></span></label><input type="range" id="sc" min="0.2" max="1.5" step="0.05" value="0.85" /></div>
+          <div class="row"><label>opacity <span class="val" id="opV"></span></label><input type="range" id="op" min="0" max="1" step="0.05" value="1" /></div>
+          <div class="hint">prev được lấy đối xứng (mirror X & rotateY).</div>
+        </div>
+
+        <h3>Chuyển động</h3>
+        <div class="row"><label>speed <span class="val" id="speedV"></span>ms</label><input type="range" id="speed" min="150" max="1500" value="550" /></div>
+        <div class="row"><label>easing</label>
+          <select id="easing">
+            <option>ease</option><option>linear</option><option>easeIn</option><option>easeOut</option>
+            <option selected>easeInOut</option><option>spring</option><option>bounce</option><option>elastic</option><option>back</option>
+          </select>
+        </div>
+        <div class="row"><label>perspective <span class="val" id="perspV"></span>px (cho hiệu ứng 3D)</label><input type="range" id="persp" min="400" max="2400" value="1200" /></div>
+
+        <h3>Bố cục</h3>
+        <div class="row"><label>items/view <span class="val" id="itemsV"></span></label><input type="range" id="items" min="1" max="5" value="1" /><div class="hint" id="itemsHint"></div></div>
+        <div class="row"><label>gap <span class="val" id="gapV"></span>px</label><input type="range" id="gap" min="0" max="48" value="0" /></div>
+        <div class="row"><label>stagePadding <span class="val" id="stageV"></span>px</label><input type="range" id="stage" min="0" max="120" value="0" /></div>
+        <div class="row"><label>số slide <span class="val" id="countV"></span></label><input type="range" id="count" min="3" max="10" value="6" /></div>
+        <div class="row"><label>axis</label><select id="axis"><option value="horizontal">horizontal</option><option value="vertical">vertical</option></select></div>
+
+        <h3>Tuỳ chọn</h3>
+        <div class="checks">
+          <label><input type="checkbox" id="loop" checked /> loop</label>
+          <label><input type="checkbox" id="center" /> center</label>
+          <label><input type="checkbox" id="nav" checked /> nav</label>
+          <label><input type="checkbox" id="dots" checked /> dots</label>
+          <label><input type="checkbox" id="rtl" /> rtl</label>
+          <label><input type="checkbox" id="autoplay" /> autoplay</label>
+        </div>
+
+        <div class="btns">
+          <button class="btn" id="prev">‹ Prev</button>
+          <button class="btn" id="next">Next ›</button>
+          <button class="btn" id="play">Play/Stop</button>
+          <button class="btn primary" id="random">🎲 Random</button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div id="carousel"></div>
+        <code id="snippet"></code>
+      </div>
+    </div>
+
+    <script type="module">
+      import Carousel, { slide as coreSlide } from '@feather-scroll/core';
+      import { effects, effectGroups, effectNames, createCreativeEffect } from '@feather-scroll/effects';
+
+      const $ = (id) => document.getElementById(id);
+      $('fxCount').textContent = `(${effectNames.length})`;
+
+      // Effect <select> grouped + a Custom option.
+      const sel = $('effect');
+      const custom = document.createElement('option');
+      custom.value = '__custom__'; custom.textContent = '✏️ Custom (builder)';
+      sel.appendChild(custom);
+      // Core `slide` (layout track) — the only effect that supports items > 1 per view.
+      const trackOg = document.createElement('optgroup');
+      trackOg.label = 'Track (multi-item)';
+      const trackOpt = document.createElement('option');
+      trackOpt.value = '__track__'; trackOpt.textContent = 'slide — nhiều item/view';
+      trackOg.appendChild(trackOpt);
+      sel.appendChild(trackOg);
+      for (const [family, list] of Object.entries(effectGroups)) {
+        const og = document.createElement('optgroup');
+        og.label = `${family} (${list.length})`;
+        for (const e of list) {
+          const o = document.createElement('option');
+          o.value = e.name; o.textContent = e.name; og.appendChild(o);
+        }
+        sel.appendChild(og);
+      }
+      // preselect from ?effect=
+      const q = new URLSearchParams(location.search).get('effect');
+      sel.value = q && (effects[q] || q === '__custom__' || q === '__track__') ? q : 'coverflow';
+
+      const root = $('carousel');
+      const captions = ['Mountains','Ocean','Forest','Desert','City','Aurora','Canyon','Meadow','Glacier','Dunes'];
+      function buildSlides(n) {
+        root.innerHTML = Array.from({ length: n }, (_, i) =>
+          `<div class="slide"><div class="layer"><img src="https://picsum.photos/seed/fs${i}/1000/460" alt="" /></div><div class="cap">${captions[i] ?? 'Slide ' + (i+1)}</div></div>`
+        ).join('');
+      }
+
+      const camel = (s) => s.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+
+      function currentEffect() {
+        if (sel.value === '__track__') return coreSlide;
+        if (sel.value === '__custom__') {
+          const tx = +$('tx').value, tz = +$('tz').value, ry = +$('ry').value, rx = +$('rx').value, sc = +$('sc').value, op = +$('op').value;
+          return createCreativeEffect({
+            name: 'custom',
+            perspective: +$('persp').value,
+            next: { translate: [tx, 0, tz], rotate: [rx, ry, 0], scale: sc, opacity: op },
+            prev: { translate: [-tx, 0, tz], rotate: [rx, -ry, 0], scale: sc, opacity: op },
+          });
+        }
+        return effects[sel.value];
+      }
+
+      function opts() {
+        return {
+          effect: currentEffect(),
+          items: +$('items').value,
+          gap: +$('gap').value,
+          stagePadding: +$('stage').value,
+          axis: $('axis').value,
+          loop: $('loop').checked,
+          center: $('center').checked,
+          nav: $('nav').checked,
+          dots: $('dots').checked,
+          rtl: $('rtl').checked,
+          speed: +$('speed').value,
+          easing: $('easing').value,
+          autoplay: $('autoplay').checked ? { delay: 2200, pauseOnHover: true } : false,
+        };
+      }
+
+      let c = null;
+      function rebuild(rebuildSlides = false) {
+        // Destroy BEFORE touching the DOM: destroy() restores the original slides
+        // into the root, so rebuilding innerHTML first would duplicate them
+        // (and the dots/slides would pile up on every change).
+        c?.destroy();
+        if (rebuildSlides || !root.children.length) buildSlides(+$('count').value);
+        c = new Carousel('#carousel', opts());
+        // live perspective override for 3D presets
+        c.track.style.perspective = $('persp').value + 'px';
+        updateLabels();
+        $('builder').classList.toggle('show', sel.value === '__custom__');
+        // items/view only takes effect on the track layout; stack effects are 1/view.
+        const multiItem = sel.value === '__track__';
+        $('items').disabled = !multiItem;
+        $('itemsHint').textContent = multiItem
+          ? ''
+          : 'Hiệu ứng 3D/stack chỉ 1 item/view. Chọn “slide — nhiều item/view” để bật multi-item.';
+        $('snippet').textContent = snippet();
+      }
+
+      function updateLabels() {
+        const map = { speed:'speedV', persp:'perspV', items:'itemsV', gap:'gapV', stage:'stageV', count:'countV', tx:'txV', tz:'tzV', ry:'ryV', rx:'rxV', sc:'scV', op:'opV' };
+        for (const [id, out] of Object.entries(map)) $(out).textContent = $(id).value;
+      }
+
+      function snippet() {
+        const o = opts();
+        if (sel.value === '__track__') {
+          return `import Carousel from '@feather-scroll/core';
+// Không truyền \`effect\` → mặc định 'slide' (layout track) → multi-item chạy được.
+new Carousel('#c', {
+  items: ${o.items}, gap: ${o.gap}, loop: ${o.loop}, center: ${o.center},
+  nav: ${o.nav}, dots: ${o.dots}, speed: ${o.speed}, easing: '${o.easing}',${o.autoplay ? '\n  autoplay: { delay: 2200 },' : ''}
+  responsive: { 640: { items: 2 }, 1024: { items: 3 }, 1280: { items: 4 } },
+});`;
+        }
+        if (sel.value === '__custom__') {
+          return `import { createCreativeEffect } from '@feather-scroll/effects';
+const custom = createCreativeEffect({
+  perspective: ${$('persp').value},
+  next: { translate: [${$('tx').value}, 0, ${$('tz').value}], rotate: [${$('rx').value}, ${$('ry').value}, 0], scale: ${$('sc').value}, opacity: ${$('op').value} },
+  prev: { translate: [${-$('tx').value}, 0, ${$('tz').value}], rotate: [${$('rx').value}, ${-$('ry').value}, 0], scale: ${$('sc').value}, opacity: ${$('op').value} },
+});
+new Carousel('#c', { effect: custom, items: ${o.items}, loop: ${o.loop} });`;
+        }
+        return `import { ${camel(sel.value)} } from '@feather-scroll/effects';
+new Carousel('#c', {
+  effect: ${camel(sel.value)},
+  items: ${o.items}, gap: ${o.gap}, loop: ${o.loop}, center: ${o.center},
+  nav: ${o.nav}, dots: ${o.dots}, speed: ${o.speed}, easing: '${o.easing}',${o.autoplay ? '\n  autoplay: { delay: 2200 },' : ''}
+});`;
+      }
+
+      // Wire controls. Sliders update live; some need a full rebuild.
+      const liveRebuild = ['effect','easing','axis','loop','center','nav','dots','rtl','autoplay','items','gap','stage','speed'];
+      liveRebuild.forEach((id) => $(id).addEventListener('input', () => rebuild()));
+      $('count').addEventListener('input', () => rebuild(true));
+      // Builder + perspective tweak live without losing position.
+      ['tx','tz','ry','rx','sc','op','persp'].forEach((id) => $(id).addEventListener('input', () => rebuild()));
+
+      $('prev').onclick = () => c?.prev();
+      $('next').onclick = () => c?.next();
+      $('play').onclick = () => { if (!c) return; c.settings.autoplay ? c.stop() : (c.play()); };
+      $('random').onclick = () => {
+        const names = effectNames;
+        sel.value = names[Math.floor(Math.random() * names.length)];
+        rebuild();
+      };
+
+      rebuild(true);
+    </script>
+  </body>
+</html>

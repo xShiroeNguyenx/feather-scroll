@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Gallery + thumbnails</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/effects": "/packages/effects/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #main { border-radius: var(--radius); overflow: hidden; background: #000; }
+      #main .fs__viewport { height: 460px; }
+      #main .slide { height: 100%; }
+      #main .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      #thumbs { margin-top: 12px; }
+      #thumbs .fs__viewport { height: 72px; }
+      /* Non-loop track: let the track fill the viewport so thumbs get height. */
+      #thumbs .fs__track { height: 100%; }
+      #thumbs .tslide { height: 100%; }
+      #thumbs .tslide img {
+        width: 100%; height: 100%; object-fit: cover; display: block;
+        border-radius: 8px; opacity: .5; transition: opacity .15s, outline-color .15s;
+        outline: 2px solid transparent; outline-offset: -2px;
+      }
+      #thumbs .is-thumb-active img { opacity: 1; outline-color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>📸 Gallery + thumbnails</h1>
+        <p class="lead">Khung ảnh lớn hiệu ứng coverflow, đồng bộ hai chiều với dải thumbnail: bấm thumbnail nhảy ảnh, đổi ảnh thì thumbnail tự sáng.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">coverflow effect</span><span class="tag">plugin thumbnails</span>
+          <span class="tag">loop</span><span class="tag">drag</span><span class="tag">keyboard / a11y</span>
+        </div>
+      </div>
+
+      <div id="main"></div>
+      <div id="thumbs"></div>
+
+      <p class="note">Ảnh lấy từ picsum.photos (gallery ảnh thật). Bấm vào khung lớn rồi dùng phím ←/→ để chuyển (a11y bật sẵn).</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { coverflow } from '@feather-scroll/effects';
+      import { thumbnails } from '@feather-scroll/plugins';
+
+      const N = 6;
+      const big = (i) => `https://picsum.photos/seed/fsgal${i}/960/520`;
+      const small = (i) => `https://picsum.photos/seed/fsgal${i}/200/120`;
+
+      const main = document.getElementById('main');
+      const thumbsEl = document.getElementById('thumbs');
+      main.innerHTML = Array.from({ length: N }, (_, i) =>
+        `<div class="slide"><img src="${big(i)}" alt="Ảnh ${i + 1}" /></div>`).join('');
+      thumbsEl.innerHTML = Array.from({ length: N }, (_, i) =>
+        `<div class="tslide"><img src="${small(i)}" alt="" /></div>`).join('');
+
+      // 1) The thumbnail strip — a normal multi-item track carousel.
+      const thumbs = new Carousel('#thumbs', {
+        items: 4, gap: 8, drag: true, nav: false, dots: false, a11y: false,
+        responsive: { 480: { items: 6 } },
+      });
+
+      // 2) The main carousel — coverflow + the thumbnails plugin synced to `thumbs`.
+      new Carousel('#main', {
+        effect: coverflow,
+        loop: true, drag: true, nav: true, dots: false,
+        speed: 550, easing: 'easeInOut',
+        plugins: [thumbnails({ thumbs })],
+      });
+    </script>
+  </body>
+</html>

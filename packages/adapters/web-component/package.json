@@ -1,0 +1,34 @@
+{
+  "name": "@feather-scroll/web-component",
+  "version": "0.1.0",
+  "description": "<feather-scroll> custom element — FeatherScroll for any framework or plain HTML.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": true,
+  "files": ["dist"],
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./global": "./dist/global.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "publishConfig": { "access": "public" },
+  "peerDependencies": {
+    "@feather-scroll/core": "workspace:*",
+    "@feather-scroll/effects": "workspace:*"
+  },
+  "devDependencies": {
+    "@feather-scroll/core": "workspace:*",
+    "@feather-scroll/effects": "workspace:*",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}

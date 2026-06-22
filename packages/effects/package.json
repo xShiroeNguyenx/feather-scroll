@@ -1,0 +1,31 @@
+{
+  "name": "@feather-scroll/effects",
+  "version": "0.1.0",
+  "description": "105+ tree-shakeable layout effects for FeatherScroll.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": ["dist"],
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "publishConfig": { "access": "public" },
+  "peerDependencies": {
+    "@feather-scroll/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@feather-scroll/core": "workspace:*",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}

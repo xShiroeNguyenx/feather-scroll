@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Logo strip</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      { "imports": { "@feather-scroll/core": "/packages/core/dist/index.js" } }
+    </script>
+    <style>
+      #logos .fs__viewport { height: 90px; }
+      .logo {
+        height: 100%; display: grid; place-items: center;
+        background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+        font-weight: 800; font-size: 1.1rem; letter-spacing: .02em; color: #475569;
+      }
+      .logo .dot { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🏷️ Logo strip</h1>
+        <p class="lead">Dải logo đối tác chạy tự động, hiển thị nhiều ô cùng lúc — dạng “được tin dùng bởi…”.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">slide (track)</span><span class="tag">nhiều items</span>
+          <span class="tag">loop</span><span class="tag">autoplay nhanh</span><span class="tag">drag</span>
+        </div>
+      </div>
+
+      <div id="logos"></div>
+
+      <p class="note">Không nav/dots — chỉ tự chạy và kéo. Tăng <code>items</code> ở breakpoint lớn để xếp nhiều logo hơn.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+
+      const brands = ['Nimbus','Vertex','Orbit','Lumen','Pulse','Atlas','Quartz','Nova','Forge','Drift'];
+      document.getElementById('logos').innerHTML =
+        brands.map((b) => `<div class="logo">${b}<span class="dot">.</span></div>`).join('');
+
+      new Carousel('#logos', {
+        items: 2, gap: 16, loop: true, drag: true, nav: false, dots: false,
+        speed: 600, easing: 'easeOut',
+        autoplay: { delay: 1800, pauseOnHover: true },
+        responsive: { 480: { items: 3 }, 768: { items: 4 }, 1024: { items: 6 } },
+      });
+    </script>
+  </body>
+</html>

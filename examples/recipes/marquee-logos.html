@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Logo marquee (auto-scroll)</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js",
+          "@feather-scroll/presets": "/packages/presets/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #logos .fs__viewport { height: 90px; }
+      .logo {
+        height: 100%; display: grid; place-items: center;
+        background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+        font-weight: 800; font-size: 1.1rem; letter-spacing: .02em; color: #475569;
+      }
+      .logo .dot { color: var(--accent); }
+      .row2 { margin-top: 14px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🏷️ Logo marquee (auto-scroll)</h1>
+        <p class="lead">Dải logo chạy <b>liên tục, đều tốc độ</b> (px/giây) — khác autoplay nhảy-bước. Dừng khi rê chuột, kéo được, vòng vô tận. Hàng dưới chạy ngược chiều.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">preset logoMarquee</span><span class="tag">plugin autoScroll</span>
+          <span class="tag">loop</span><span class="tag">dragFree</span>
+        </div>
+      </div>
+
+      <div id="logos"></div>
+      <div id="logos2" class="row2"></div>
+
+      <p class="note">Marquee chạy bằng <code>autoScroll({ speed })</code> + <code>loop</code>. Tôn trọng <code>prefers-reduced-motion</code> (sẽ đứng yên).</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { logoMarquee } from '@feather-scroll/presets';
+
+      const brands = ['Nimbus','Vertex','Orbit','Lumen','Pulse','Atlas','Quartz','Nova','Forge','Drift'];
+      const html = brands.map((b) => `<div class="logo">${b}<span class="dot">.</span></div>`).join('');
+      document.getElementById('logos').innerHTML = html;
+      document.getElementById('logos2').innerHTML = html;
+
+      new Carousel('#logos', logoMarquee({ speed: 50 }));
+      new Carousel('#logos2', logoMarquee({ speed: 35, reverse: true }));
+    </script>
+  </body>
+</html>

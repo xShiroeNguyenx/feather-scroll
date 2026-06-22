@@ -1,0 +1,57 @@
+[
+  {
+    "name": "core — slide + fade (ESM, gzip)",
+    "path": "packages/core/dist/index.js",
+    "limit": "8 KB",
+    "gzip": true
+  },
+  {
+    "name": "all 105 effects (whole library, gzip)",
+    "path": "packages/effects/dist/index.js",
+    "limit": "8 KB",
+    "gzip": true
+  },
+  {
+    "name": "plugin — lazyload",
+    "path": "packages/plugins/dist/lazyload.js",
+    "limit": "2 KB",
+    "gzip": true
+  },
+  {
+    "name": "plugin — autoScroll (marquee)",
+    "path": "packages/plugins/dist/autoScroll.js",
+    "limit": "1 KB",
+    "gzip": true
+  },
+  {
+    "name": "plugin — mousewheel",
+    "path": "packages/plugins/dist/mousewheel.js",
+    "limit": "1 KB",
+    "gzip": true
+  },
+  {
+    "name": "plugin — scrollbar",
+    "path": "packages/plugins/dist/scrollbar.js",
+    "limit": "1.5 KB",
+    "gzip": true
+  },
+  {
+    "name": "plugin — virtual",
+    "path": "packages/plugins/dist/virtual.js",
+    "limit": "1 KB",
+    "gzip": true
+  },
+  {
+    "name": "presets (product configs)",
+    "path": "packages/presets/dist/index.js",
+    "limit": "1.5 KB",
+    "gzip": true,
+    "ignore": ["@feather-scroll/core", "@feather-scroll/plugins"]
+  },
+  {
+    "name": "web-component all-in-one (IIFE: core + effects)",
+    "path": "packages/adapters/web-component/dist/global.global.js",
+    "limit": "16 KB",
+    "gzip": true
+  }
+]

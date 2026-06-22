@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Product carousel</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      { "imports": { "@feather-scroll/core": "/packages/core/dist/index.js" } }
+    </script>
+    <style>
+      #shop { padding: 0 4px; }
+      #shop .fs__viewport { height: 360px; }
+      #shop .fs__nav--prev { left: -8px; }
+      #shop .fs__nav--next { right: -8px; }
+
+      .pcard {
+        height: 100%; background: var(--card); border: 1px solid var(--line);
+        border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column;
+      }
+      .pcard .thumb {
+        flex: 1 1 auto; min-height: 0; display: grid; place-items: center; font-size: 3rem;
+      }
+      .pcard .body { padding: .85rem 1rem 1rem; display: flex; flex-direction: column; gap: .35rem; }
+      .pcard .name { font-weight: 700; font-size: .95rem; }
+      .pcard .stars { color: var(--star); font-size: .85rem; }
+      .pcard .row { display: flex; align-items: center; justify-content: space-between; margin-top: .2rem; }
+      .pcard .price { font-weight: 800; font-size: 1.05rem; }
+      .pcard .add {
+        border: 0; background: var(--accent); color: #fff; font-weight: 700; cursor: pointer;
+        padding: .45rem .8rem; border-radius: 8px; font-size: .82rem;
+      }
+      .pcard .add:hover { filter: brightness(1.08); }
+      .g0 { background: linear-gradient(135deg,#eef2ff,#c7d2fe); }
+      .g1 { background: linear-gradient(135deg,#fef3c7,#fcd34d); }
+      .g2 { background: linear-gradient(135deg,#dcfce7,#86efac); }
+      .g3 { background: linear-gradient(135deg,#fce7f3,#f9a8d4); }
+      .g4 { background: linear-gradient(135deg,#e0f2fe,#7dd3fc); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🛍️ Product carousel</h1>
+        <p class="lead">Hàng sản phẩm cuộn ngang theo “trang” (mỗi lần bấm nhảy đúng một màn hình sản phẩm), tự co theo bề rộng.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">slide (track)</span><span class="tag">responsive items 1→2→3→4</span>
+          <span class="tag">slideBy: 'page'</span><span class="tag">loop</span><span class="tag">nav</span><span class="tag">drag</span>
+        </div>
+      </div>
+
+      <div id="shop"></div>
+
+      <p class="note">Ảnh sản phẩm là nền gradient + emoji (không tải ảnh ngoài). <code>slideBy: 'page'</code> khiến nav nhảy theo số <code>items</code> đang hiển thị.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+
+      const products = [
+        { icon: '🎧', name: 'Tai nghe không dây', price: '1.290.000₫', stars: 5 },
+        { icon: '⌨️', name: 'Bàn phím cơ',         price: '1.750.000₫', stars: 4 },
+        { icon: '🖱️', name: 'Chuột công thái học', price: '690.000₫',   stars: 5 },
+        { icon: '🔊', name: 'Loa Bluetooth',       price: '980.000₫',   stars: 4 },
+        { icon: '📷', name: 'Webcam 4K',           price: '1.490.000₫', stars: 5 },
+        { icon: '💡', name: 'Đèn bàn LED',         price: '450.000₫',   stars: 4 },
+        { icon: '💻', name: 'Giá đỡ laptop',       price: '320.000₫',   stars: 5 },
+        { icon: '💾', name: 'Ổ cứng SSD 1TB',      price: '1.890.000₫', stars: 5 },
+      ];
+
+      const card = (p, i) => `
+        <article class="pcard">
+          <div class="thumb g${i % 5}">${p.icon}</div>
+          <div class="body">
+            <div class="name">${p.name}</div>
+            <div class="stars">${'★'.repeat(p.stars)}${'☆'.repeat(5 - p.stars)}</div>
+            <div class="row">
+              <span class="price">${p.price}</span>
+              <button class="add" type="button">Thêm vào giỏ</button>
+            </div>
+          </div>
+        </article>`;
+
+      const root = document.getElementById('shop');
+      root.innerHTML = products.map(card).join('');
+
+      new Carousel('#shop', {
+        items: 1, gap: 16, loop: true, drag: true, nav: true, dots: false,
+        slideBy: 'page', speed: 450, easing: 'easeOut',
+        responsive: { 520: { items: 2 }, 860: { items: 3 }, 1100: { items: 4 } },
+      });
+    </script>
+  </body>
+</html>

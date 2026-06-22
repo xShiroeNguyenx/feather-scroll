@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+*.tsbuildinfo
+.DS_Store
+.idea/
+.vscode/
+*.log
+.cache/
+playwright-report/
+test-results/

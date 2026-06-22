@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Autoplay + progress bar</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      { "imports": { "@feather-scroll/core": "/packages/core/dist/index.js" } }
+    </script>
+    <style>
+      #pc { border-radius: var(--radius); overflow: hidden; }
+      #pc .fs__viewport { height: 380px; }
+      .pslide { height: 100%; color: #fff; display: grid; place-items: center; font-size: 2rem; font-weight: 800; }
+      .q0 { background: linear-gradient(135deg,#4f46e5,#7c3aed); }
+      .q1 { background: linear-gradient(135deg,#0ea5e9,#2563eb); }
+      .q2 { background: linear-gradient(135deg,#f59e0b,#ea580c); }
+      .q3 { background: linear-gradient(135deg,#10b981,#0d9488); }
+
+      .pbar { height: 4px; background: #e2e5ea; border-radius: 999px; overflow: hidden; margin-top: 12px; }
+      .pfill { height: 100%; width: 0; background: var(--accent); }
+      @keyframes fill { from { width: 0; } to { width: 100%; } }
+      .pp {
+        margin-top: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink);
+        font-weight: 700; padding: .45rem .9rem; border-radius: 8px; cursor: pointer; font-size: .85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>⏱️ Autoplay + progress bar</h1>
+        <p class="lead">Thanh tiến trình cho biết khi nào slide tự chuyển, kèm nút tạm dừng/chạy — dựng bằng sự kiện và phương thức của instance.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">fade effect</span><span class="tag">autoplay</span>
+          <span class="tag">events: on('change')</span><span class="tag">API: play()/stop()</span>
+        </div>
+      </div>
+
+      <div id="pc">
+        <div class="pslide q0">1</div>
+        <div class="pslide q1">2</div>
+        <div class="pslide q2">3</div>
+        <div class="pslide q3">4</div>
+      </div>
+      <div class="pbar"><div class="pfill" id="pfill"></div></div>
+      <button class="pp" id="pp" type="button">⏸ Tạm dừng</button>
+
+      <p class="note">Mỗi sự kiện <code>change</code> sẽ chạy lại animation thanh tiến trình đúng bằng <code>delay</code> của autoplay. Nút bấm gọi <code>c.play()</code> / <code>c.stop()</code>.</p>
+    </div>
+
+    <script type="module">
+      import Carousel, { fade } from '@feather-scroll/core';
+
+      const DELAY = 3500;
+      const fill = document.getElementById('pfill');
+      const pp = document.getElementById('pp');
+
+      const c = new Carousel('#pc', {
+        effect: fade, loop: true, speed: 600, easing: 'easeInOut',
+        autoplay: { delay: DELAY, pauseOnHover: true },
+      });
+
+      function restartBar() {
+        fill.style.animation = 'none';
+        void fill.offsetWidth; // force reflow so the animation truly restarts
+        fill.style.animation = `fill ${DELAY}ms linear`;
+        fill.style.animationPlayState = 'running';
+      }
+      c.on('change', restartBar);
+      restartBar(); // kick off for the first slide (init already fired in the constructor)
+
+      let playing = true;
+      pp.addEventListener('click', () => {
+        playing = !playing;
+        if (playing) { c.play(); fill.style.animationPlayState = 'running'; pp.textContent = '⏸ Tạm dừng'; }
+        else { c.stop(); fill.style.animationPlayState = 'paused'; pp.textContent = '▶ Chạy tiếp'; }
+      });
+    </script>
+  </body>
+</html>

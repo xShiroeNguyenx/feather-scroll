@@ -1,0 +1,71 @@
+{
+  "name": "@feather-scroll/plugins",
+  "version": "0.1.0",
+  "description": "Optional FeatherScroll plugins: lazyload, autoHeight, hash, thumbnails, autoScroll, mousewheel, scrollbar, virtual.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": ["dist"],
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./lazyload": {
+      "types": "./dist/lazyload.d.ts",
+      "import": "./dist/lazyload.js",
+      "require": "./dist/lazyload.cjs"
+    },
+    "./autoHeight": {
+      "types": "./dist/autoHeight.d.ts",
+      "import": "./dist/autoHeight.js",
+      "require": "./dist/autoHeight.cjs"
+    },
+    "./hash": {
+      "types": "./dist/hash.d.ts",
+      "import": "./dist/hash.js",
+      "require": "./dist/hash.cjs"
+    },
+    "./thumbnails": {
+      "types": "./dist/thumbnails.d.ts",
+      "import": "./dist/thumbnails.js",
+      "require": "./dist/thumbnails.cjs"
+    },
+    "./autoScroll": {
+      "types": "./dist/autoScroll.d.ts",
+      "import": "./dist/autoScroll.js",
+      "require": "./dist/autoScroll.cjs"
+    },
+    "./mousewheel": {
+      "types": "./dist/mousewheel.d.ts",
+      "import": "./dist/mousewheel.js",
+      "require": "./dist/mousewheel.cjs"
+    },
+    "./scrollbar": {
+      "types": "./dist/scrollbar.d.ts",
+      "import": "./dist/scrollbar.js",
+      "require": "./dist/scrollbar.cjs"
+    },
+    "./virtual": {
+      "types": "./dist/virtual.d.ts",
+      "import": "./dist/virtual.js",
+      "require": "./dist/virtual.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "publishConfig": { "access": "public" },
+  "peerDependencies": {
+    "@feather-scroll/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@feather-scroll/core": "workspace:*",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}

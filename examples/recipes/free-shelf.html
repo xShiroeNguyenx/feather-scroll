@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Free-scroll shelf</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js",
+          "@feather-scroll/presets": "/packages/presets/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #shop { padding: 0 4px; }
+      #shop .fs__viewport { height: 320px; }
+      .pcard {
+        height: 100%; background: var(--card); border: 1px solid var(--line);
+        border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column;
+      }
+      .pcard .thumb { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; font-size: 3rem; }
+      .pcard .body { padding: .8rem 1rem 1rem; display: flex; flex-direction: column; gap: .35rem; }
+      .pcard .name { font-weight: 700; font-size: .95rem; }
+      .pcard .row { display: flex; align-items: center; justify-content: space-between; margin-top: .2rem; }
+      .pcard .price { font-weight: 800; font-size: 1.05rem; }
+      .g0 { background: linear-gradient(135deg,#eef2ff,#c7d2fe); }
+      .g1 { background: linear-gradient(135deg,#fef3c7,#fcd34d); }
+      .g2 { background: linear-gradient(135deg,#dcfce7,#86efac); }
+      .g3 { background: linear-gradient(135deg,#fce7f3,#f9a8d4); }
+      .g4 { background: linear-gradient(135deg,#e0f2fe,#7dd3fc); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🛒 Free-scroll shelf</h1>
+        <p class="lead">Kệ sản phẩm kéo trớn có quán tính (không snap cứng) — đúng kiểu “you may also like” của Amazon. Có thanh cuộn kéo được và mép mờ gợi ý còn hàng.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">preset freeShelf</span><span class="tag">dragFree (momentum)</span>
+          <span class="tag">plugin scrollbar</span><span class="tag">fs--fade-edges</span>
+        </div>
+      </div>
+
+      <div id="shop"></div>
+
+      <p class="note">Kéo và thả tay — kệ chạy tiếp theo quán tính. Dùng <code>dragFree: 'snap'</code> nếu muốn dừng đúng vào sản phẩm gần nhất.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { freeShelf } from '@feather-scroll/presets';
+      import { scrollbar } from '@feather-scroll/plugins';
+
+      const products = [
+        { icon: '🎧', name: 'Tai nghe không dây', price: '1.290.000₫' },
+        { icon: '⌨️', name: 'Bàn phím cơ', price: '1.750.000₫' },
+        { icon: '🖱️', name: 'Chuột công thái học', price: '690.000₫' },
+        { icon: '🔊', name: 'Loa Bluetooth', price: '980.000₫' },
+        { icon: '📷', name: 'Webcam 4K', price: '1.490.000₫' },
+        { icon: '💡', name: 'Đèn bàn LED', price: '450.000₫' },
+        { icon: '💻', name: 'Giá đỡ laptop', price: '320.000₫' },
+        { icon: '💾', name: 'Ổ cứng SSD 1TB', price: '1.890.000₫' },
+        { icon: '🔌', name: 'Sạc nhanh 65W', price: '540.000₫' },
+        { icon: '🎮', name: 'Tay cầm chơi game', price: '820.000₫' },
+      ];
+
+      const root = document.getElementById('shop');
+      root.classList.add('fs--fade-edges');
+      root.innerHTML = products
+        .map((p, i) => `
+          <article class="pcard">
+            <div class="thumb g${i % 5}">${p.icon}</div>
+            <div class="body">
+              <div class="name">${p.name}</div>
+              <div class="row"><span class="price">${p.price}</span></div>
+            </div>
+          </article>`)
+        .join('');
+
+      new Carousel('#shop', { ...freeShelf({ gap: 16 }), plugins: [scrollbar()] });
+    </script>
+  </body>
+</html>

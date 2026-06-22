@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Native scroll-snap</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      { "imports": { "@feather-scroll/core": "/packages/core/dist/index.js" } }
+    </script>
+    <style>
+      #native { padding: 0 4px; }
+      #native .fs__viewport { height: 280px; }
+      #native .fs__nav--prev { left: -8px; }
+      #native .fs__nav--next { right: -8px; }
+      .nslide {
+        height: 100%; border-radius: var(--radius); color: #fff;
+        display: grid; place-items: center; font-size: 2rem; font-weight: 800;
+      }
+      .n0 { background: linear-gradient(135deg,#4f46e5,#8b5cf6); }
+      .n1 { background: linear-gradient(135deg,#0ea5e9,#14b8a6); }
+      .n2 { background: linear-gradient(135deg,#f59e0b,#ef4444); }
+      .n3 { background: linear-gradient(135deg,#ec4899,#a855f7); }
+      .n4 { background: linear-gradient(135deg,#22c55e,#16a34a); }
+      .n5 { background: linear-gradient(135deg,#06b6d4,#3b82f6); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>📜 Native scroll-snap</h1>
+        <p class="lead">Chế độ <code>renderMode: 'native'</code>: dùng CSS scroll-snap gốc của trình duyệt — cực nhẹ, momentum mượt, cuộn bằng vuốt/trackpad.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">renderMode: 'native'</span><span class="tag">responsive items 1→2→3</span>
+          <span class="tag">gap</span><span class="tag">nav (cuộn mượt)</span>
+        </div>
+      </div>
+
+      <div id="native"></div>
+
+      <p class="note">Ở chế độ native, JS gần như không chạy mỗi frame — trình duyệt lo cuộn &amp; snap. Nút nav gọi <code>to()</code> và cuộn smooth tới slide.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+
+      const root = document.getElementById('native');
+      root.innerHTML = Array.from({ length: 6 }, (_, i) =>
+        `<div class="nslide n${i}">${i + 1}</div>`).join('');
+
+      new Carousel('#native', {
+        renderMode: 'native',
+        items: 1, gap: 14, nav: true, dots: false,
+        responsive: { 600: { items: 2 }, 960: { items: 3 } },
+      });
+    </script>
+  </body>
+</html>

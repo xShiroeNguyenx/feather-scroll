@@ -1,0 +1,70 @@
+/* Shared chrome for the FeatherScroll "recipe" demos (complete, real-world widgets). */
+:root {
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --ink: #15181d;
+  --muted: #6b7280;
+  --line: #e6e8ec;
+  --accent: #4f46e5;
+  --accent-ink: #ffffff;
+  --star: #f5b50a;
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 2.2rem 1.25rem 4rem; }
+
+/* ── Demo header ──────────────────────────────────────────── */
+.recipe-head { margin-bottom: 1.6rem; }
+.recipe-head .back {
+  display: inline-block; color: var(--muted); text-decoration: none;
+  font-size: .85rem; font-weight: 600; margin-bottom: .6rem;
+}
+.recipe-head .back:hover { color: var(--accent); }
+.recipe-head h1 { font-size: 1.6rem; margin: 0 0 .5rem; font-weight: 800; }
+.recipe-head .lead { color: var(--muted); margin: 0 0 .8rem; max-width: 60ch; }
+.combo {
+  display: flex; flex-wrap: wrap; gap: .4rem; align-items: center;
+  font-size: .8rem; color: var(--muted);
+}
+.combo .lbl { font-weight: 700; color: var(--ink); margin-right: .15rem; }
+.combo .tag {
+  background: #eef0ff; color: var(--accent); font-weight: 700;
+  padding: .15rem .55rem; border-radius: 999px; font-size: .75rem;
+  border: 1px solid #e0e3ff;
+}
+
+/* ── Index (landing) cards ────────────────────────────────── */
+.intro h1 { font-size: 1.9rem; margin: 0 0 .4rem; font-weight: 800; }
+.intro p { color: var(--muted); margin: 0 0 2rem; max-width: 70ch; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.1rem; }
+a.recipe-card {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.2rem 1.3rem; transition: border-color .15s, transform .15s, box-shadow .15s;
+}
+a.recipe-card:hover {
+  border-color: var(--accent); transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(79, 70, 229, .12);
+}
+a.recipe-card .emoji { font-size: 1.6rem; }
+a.recipe-card h2 { font-size: 1.1rem; margin: .5rem 0 .35rem; }
+a.recipe-card p { color: var(--muted); font-size: .88rem; margin: 0 0 .8rem; }
+
+/* ── Shared carousel chrome overrides ─────────────────────── */
+.fs__nav {
+  background: #ffffff; color: var(--ink);
+  box-shadow: 0 4px 16px rgba(0,0,0,.16); border: 1px solid var(--line);
+}
+.fs__nav:hover { background: #fff; color: var(--accent); }
+.fs__dot { background: #cfd3da; }
+.fs__dot.is-active { background: var(--accent); }
+
+.note { margin-top: 1.4rem; color: var(--muted); font-size: .85rem; }
+.note code { background: #eceef2; padding: 1px 6px; border-radius: 5px; font-size: .8rem; }

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Product gallery (main + thumbnails)</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js",
+          "@feather-scroll/presets": "/packages/presets/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #main .fs__viewport { height: 340px; border-radius: var(--radius); }
+      .shot { height: 100%; display: grid; place-items: center; font-size: 6rem; border-radius: var(--radius); }
+      #thumbs { margin-top: 12px; }
+      #thumbs .fs__viewport { height: 72px; }
+      .thumb {
+        height: 100%; display: grid; place-items: center; font-size: 1.8rem;
+        border: 2px solid transparent; border-radius: 10px; background: var(--card); cursor: pointer;
+      }
+      .thumb.is-thumb-active { border-color: var(--accent); }
+      .g0 { background: linear-gradient(135deg,#eef2ff,#c7d2fe); }
+      .g1 { background: linear-gradient(135deg,#fef3c7,#fcd34d); }
+      .g2 { background: linear-gradient(135deg,#dcfce7,#86efac); }
+      .g3 { background: linear-gradient(135deg,#fce7f3,#f9a8d4); }
+      .g4 { background: linear-gradient(135deg,#e0f2fe,#7dd3fc); }
+      .g5 { background: linear-gradient(135deg,#ede9fe,#c4b5fd); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🖼️ Product gallery (main + thumbnails)</h1>
+        <p class="lead">Trang chi tiết sản phẩm: ảnh lớn + dải thumbnail đồng bộ hai chiều. Bấm thumbnail để đổi ảnh chính.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">preset thumbGallery</span><span class="tag">plugin thumbnails</span>
+          <span class="tag">nav</span><span class="tag">keyboard / a11y</span>
+        </div>
+      </div>
+
+      <div id="main"></div>
+      <div id="thumbs"></div>
+
+      <p class="note"><code>thumbGallery()</code> trả về cặp option <code>{ main, thumbs }</code>; nối hai carousel bằng plugin <code>thumbnails</code>.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { thumbGallery } from '@feather-scroll/presets';
+      import { thumbnails } from '@feather-scroll/plugins';
+
+      const shots = ['👟','👟','👟','👟','👟','👟'];
+      const main = document.getElementById('main');
+      const thumbs = document.getElementById('thumbs');
+      main.innerHTML = shots.map((s, i) => `<div class="shot g${i % 6}">${s}</div>`).join('');
+      thumbs.innerHTML = shots.map((s, i) => `<div class="thumb g${i % 6}">${s}</div>`).join('');
+
+      const cfg = thumbGallery();
+      const strip = new Carousel('#thumbs', cfg.thumbs);
+      new Carousel('#main', { ...cfg.main, plugins: [thumbnails({ thumbs: strip })] });
+    </script>
+  </body>
+</html>

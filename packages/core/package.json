@@ -1,0 +1,32 @@
+{
+  "name": "@feather-scroll/core",
+  "version": "0.1.0",
+  "description": "FeatherScroll core engine — zero-dependency carousel/scroll.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "files": ["dist", "styles"],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles/*": "./styles/*"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": ["carousel", "slider", "scroll", "swipe", "lightweight", "zero-dependency"],
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}

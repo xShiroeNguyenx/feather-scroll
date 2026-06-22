@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — URL hash deep-link</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #hashc { border-radius: var(--radius); overflow: hidden; }
+      #hashc .fs__viewport { height: 360px; }
+      .panel {
+        height: 100%; color: #fff; padding: 2.2rem 2.4rem;
+        display: flex; flex-direction: column; justify-content: center; gap: .6rem;
+      }
+      .panel h2 { margin: 0; font-size: 2rem; font-weight: 800; }
+      .panel p { margin: 0; max-width: 44ch; opacity: .92; }
+      .p0 { background: linear-gradient(135deg,#4f46e5,#6d28d9); }
+      .p1 { background: linear-gradient(135deg,#0891b2,#0e7490); }
+      .p2 { background: linear-gradient(135deg,#be123c,#9f1239); }
+      .p3 { background: linear-gradient(135deg,#15803d,#166534); }
+      .jump { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+      .jump a {
+        text-decoration: none; color: var(--accent); border: 1px solid var(--line);
+        background: var(--card); padding: .35rem .8rem; border-radius: 999px; font-size: .85rem; font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🔗 URL hash deep-link</h1>
+        <p class="lead">Mỗi slide có một “tag”; URL tự cập nhật <code>#tag</code> và mở đúng slide khi tải lại hoặc dùng nút back/forward.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">fade effect</span><span class="tag">plugin hash</span>
+          <span class="tag">dots</span><span class="tag">nav</span><span class="tag">loop</span>
+        </div>
+      </div>
+
+      <div id="hashc">
+        <div class="panel p0" data-fs-hash="gioi-thieu"><h2>Giới thiệu</h2><p>Để ý thanh địa chỉ — nó đổi thành <b>#gioi-thieu</b> khi bạn ở slide này.</p></div>
+        <div class="panel p1" data-fs-hash="tinh-nang"><h2>Tính năng</h2><p>Chuyển slide → URL thành <b>#tinh-nang</b>. Bookmark được luôn.</p></div>
+        <div class="panel p2" data-fs-hash="bang-gia"><h2>Bảng giá</h2><p>Mở thẳng <b>#bang-gia</b> sẽ nhảy đúng vào đây khi tải trang.</p></div>
+        <div class="panel p3" data-fs-hash="faq"><h2>FAQ</h2><p>Nút back/forward của trình duyệt cũng điều hướng slide.</p></div>
+      </div>
+
+      <div class="jump">
+        <a href="#gioi-thieu">#gioi-thieu</a>
+        <a href="#tinh-nang">#tinh-nang</a>
+        <a href="#bang-gia">#bang-gia</a>
+        <a href="#faq">#faq</a>
+      </div>
+
+      <p class="note">Slide khai báo tag bằng <code>data-fs-hash="…"</code>. Plugin <code>hash</code> lo việc đồng bộ hai chiều với URL.</p>
+    </div>
+
+    <script type="module">
+      import Carousel, { fade } from '@feather-scroll/core';
+      import { hash } from '@feather-scroll/plugins';
+
+      new Carousel('#hashc', {
+        effect: fade, loop: true, nav: true, dots: true,
+        speed: 500, easing: 'easeInOut',
+        plugins: [hash()],
+      });
+    </script>
+  </body>
+</html>

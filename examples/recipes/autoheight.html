@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Auto height</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #ah { max-width: 680px; }
+      /* Single-item slides of different heights — don't stretch them to the tallest. */
+      #ah .fs__track { align-items: flex-start; }
+      .apanel {
+        width: 100%;
+        background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+        padding: 1.4rem 1.5rem;
+      }
+      .apanel h2 { margin: 0 0 .5rem; font-size: 1.15rem; }
+      .apanel p { margin: 0 0 .6rem; color: #4b5563; }
+      .apanel .tagline { color: var(--muted); font-size: .82rem; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>📐 Auto height</h1>
+        <p class="lead">Các slide cao thấp khác nhau; khung tự co giãn chiều cao khớp slide đang xem — không để khoảng trống thừa.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">slide (track)</span><span class="tag">plugin autoHeight</span>
+          <span class="tag">nav</span><span class="tag">dots</span>
+        </div>
+      </div>
+
+      <div id="ah">
+        <div class="apanel">
+          <h2>Ngắn gọn</h2>
+          <p>Một đoạn rất ngắn.</p>
+          <span class="tagline">Slide 1</span>
+        </div>
+        <div class="apanel">
+          <h2>Vừa phải</h2>
+          <p>Đoạn này dài hơn một chút để thấy khung cao lên so với slide trước. Nội dung tự nhiên, không cố định chiều cao.</p>
+          <p>Thêm một dòng nữa cho khác biệt rõ ràng.</p>
+          <span class="tagline">Slide 2</span>
+        </div>
+        <div class="apanel">
+          <h2>Dài</h2>
+          <p>Khi nội dung nhiều, khung tiếp tục giãn ra theo đúng chiều cao thật của slide. Bạn không phải đặt height cố định cho viewport.</p>
+          <p>Plugin <b>autoHeight</b> đo <code>scrollHeight</code> của slide đang hoạt động và animate chiều cao viewport mượt mà mỗi khi chuyển.</p>
+          <p>Hữu ích cho FAQ, mô tả sản phẩm, hay các bước có lượng chữ chênh lệch.</p>
+          <span class="tagline">Slide 3</span>
+        </div>
+        <div class="apanel">
+          <h2>Lại ngắn</h2>
+          <p>Và thu nhỏ lại ngay.</p>
+          <span class="tagline">Slide 4</span>
+        </div>
+      </div>
+
+      <p class="note">Không cần đặt <code>height</code> cho <code>.fs__viewport</code> — plugin <code>autoHeight</code> tự gán theo slide hiện tại (có transition).</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { autoHeight } from '@feather-scroll/plugins';
+
+      new Carousel('#ah', {
+        items: 1, gap: 0, loop: false, nav: true, dots: true,
+        speed: 400, easing: 'easeOut',
+        plugins: [autoHeight({ transition: 'height .35s ease' })],
+      });
+    </script>
+  </body>
+</html>

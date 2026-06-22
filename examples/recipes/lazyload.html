@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Lazyload gallery</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #lz { padding: 0 4px; }
+      #lz .fs__viewport { height: 300px; }
+      #lz .fs__nav--prev { left: -8px; }
+      #lz .fs__nav--next { right: -8px; }
+      .lz-slide { height: 100%; border-radius: var(--radius); overflow: hidden; }
+      .lz-slide img {
+        width: 100%; height: 100%; object-fit: cover; display: block;
+        background: linear-gradient(100deg,#e5e7eb 30%,#eef0f3 50%,#e5e7eb 70%);
+        background-size: 200% 100%; animation: shimmer 1.2s infinite linear;
+      }
+      .lz-slide img.fs-lazy-loaded { animation: none; background: none; }
+      @keyframes shimmer { to { background-position: -200% 0; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🐢 Lazyload gallery</h1>
+        <p class="lead">Ảnh chỉ tải khi slide sắp vào tầm nhìn — tiết kiệm băng thông cho gallery dài.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">slide (track)</span><span class="tag">plugin lazyload</span>
+          <span class="tag">responsive 1→2→3</span><span class="tag">loop</span><span class="tag">nav</span>
+        </div>
+      </div>
+
+      <div id="lz"></div>
+
+      <p class="note">Ảnh khai báo qua <code>&lt;img data-fs-src="…"&gt;</code> (không có <code>src</code> ban đầu). Plugin <code>lazyload</code> gắn <code>src</code> khi tới gần + thêm class <code>fs-lazy-loaded</code> (ở đây tắt hiệu ứng shimmer).</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { lazyload } from '@feather-scroll/plugins';
+
+      const N = 9;
+      const root = document.getElementById('lz');
+      root.innerHTML = Array.from({ length: N }, (_, i) =>
+        `<div class="lz-slide"><img data-fs-src="https://picsum.photos/seed/fslz${i}/600/300" alt="Ảnh ${i + 1}" /></div>`).join('');
+
+      new Carousel('#lz', {
+        items: 1, gap: 14, loop: true, nav: true, dots: false, drag: true,
+        speed: 450, easing: 'easeOut',
+        responsive: { 600: { items: 2 }, 960: { items: 3 } },
+        plugins: [lazyload({ preload: 1 })],
+      });
+    </script>
+  </body>
+</html>

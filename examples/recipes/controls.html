@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Custom controls + counter</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      { "imports": { "@feather-scroll/core": "/packages/core/dist/index.js" } }
+    </script>
+    <style>
+      #cc { border-radius: var(--radius); overflow: hidden; }
+      #cc .fs__viewport { height: 360px; }
+      .xslide { height: 100%; color: #fff; display: grid; place-items: center; font-size: 2.4rem; font-weight: 800; }
+      .x0 { background: linear-gradient(135deg,#6366f1,#a855f7); }
+      .x1 { background: linear-gradient(135deg,#06b6d4,#3b82f6); }
+      .x2 { background: linear-gradient(135deg,#f97316,#ef4444); }
+      .x3 { background: linear-gradient(135deg,#22c55e,#15803d); }
+      .x4 { background: linear-gradient(135deg,#ec4899,#db2777); }
+
+      .bar { display: flex; align-items: center; gap: 1rem; margin-top: 14px; }
+      .bar button {
+        width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line);
+        background: var(--card); cursor: pointer; font-size: 1.2rem; color: var(--ink);
+      }
+      .bar button:hover { color: var(--accent); border-color: var(--accent); }
+      .counter { font-variant-numeric: tabular-nums; font-weight: 800; }
+      .counter .cur { color: var(--accent); }
+      .mydots { display: flex; gap: 8px; margin-left: auto; }
+      .mydots button {
+        width: 10px; height: 10px; border-radius: 50%; border: 0; padding: 0;
+        background: #cfd3da; cursor: pointer;
+      }
+      .mydots button.on { background: var(--accent); transform: scale(1.3); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🎛️ Custom controls + counter</h1>
+        <p class="lead">Tự dựng nút prev/next, bộ đếm “n / tổng” và dots riêng — tất cả nối với instance qua API công khai.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">API: next/prev/to</span><span class="tag">events: on('change')</span>
+          <span class="tag">nav/dots tự dựng</span><span class="tag">loop</span>
+        </div>
+      </div>
+
+      <div id="cc"></div>
+
+      <div class="bar">
+        <button id="prev" type="button" aria-label="Trước">‹</button>
+        <button id="next" type="button" aria-label="Sau">›</button>
+        <span class="counter"><span class="cur" id="cur">1</span> / <span id="total">5</span></span>
+        <div class="mydots" id="mydots"></div>
+      </div>
+
+      <p class="note">Carousel khởi tạo với <code>nav:false, dots:false</code> — toàn bộ UI điều khiển là của bạn, đồng bộ nhờ sự kiện <code>change</code>.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+
+      const root = document.getElementById('cc');
+      const TOTAL = 5;
+      root.innerHTML = Array.from({ length: TOTAL }, (_, i) =>
+        `<div class="xslide x${i}">${i + 1}</div>`).join('');
+
+      const c = new Carousel('#cc', { items: 1, loop: true, nav: false, dots: false, speed: 450, easing: 'easeOut' });
+
+      // Build custom dots wired to .to(i)
+      const dotsWrap = document.getElementById('mydots');
+      const dots = Array.from({ length: c.length }, (_, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', `Slide ${i + 1}`);
+        b.addEventListener('click', () => c.to(i));
+        dotsWrap.appendChild(b);
+        return b;
+      });
+
+      const cur = document.getElementById('cur');
+      document.getElementById('total').textContent = String(c.length);
+      document.getElementById('prev').addEventListener('click', () => c.prev());
+      document.getElementById('next').addEventListener('click', () => c.next());
+
+      function sync() {
+        cur.textContent = String(c.index + 1);
+        dots.forEach((d, i) => d.classList.toggle('on', i === c.index));
+      }
+      c.on('change', sync);
+      sync();
+    </script>
+  </body>
+</html>

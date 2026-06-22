@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FeatherScroll — Showcase 105 hiệu ứng</title>
+    <link rel="stylesheet" href="../../packages/core/styles/core.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/effects": "/packages/effects/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body { font-family: system-ui, sans-serif; margin: 0; background: #0b1020; color: #e6eaf2; }
+      a { color: #38bdf8; text-decoration: none; }
+      .top { padding: 1rem 1.5rem; border-bottom: 1px solid #1e2740; position: sticky; top: 0; background: #0b1020e6; backdrop-filter: blur(6px); z-index: 50; }
+      .top h1 { font-size: 1.15rem; margin: 0 0 .15rem; }
+      .top .sub { color: #94a3b8; font-size: .85rem; }
+      .wrap { padding: 1.5rem; max-width: 1280px; margin: 0 auto; }
+      h2 { font-size: .95rem; color: #cbd5e1; margin: 1.6rem 0 .8rem; text-transform: capitalize; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1rem; }
+      .card { background: #111933; border: 1px solid #1e2740; border-radius: 12px; overflow: hidden; }
+      .card .name { display: flex; justify-content: space-between; align-items: center; padding: .5rem .7rem; font-size: .82rem; }
+      .card .name b { font-weight: 600; }
+      .card .name a { font-size: .72rem; opacity: .8; }
+      .mini { height: 150px; }
+      .mini .fs__viewport { height: 150px; }
+      .s { height: 100%; display: grid; place-items: center; font-size: 2rem; font-weight: 800; color: #fff; }
+      .g0 { background: linear-gradient(135deg,#6366f1,#a855f7); }
+      .g1 { background: linear-gradient(135deg,#ec4899,#f43f5e); }
+      .g2 { background: linear-gradient(135deg,#14b8a6,#0ea5e9); }
+      .g3 { background: linear-gradient(135deg,#f59e0b,#ef4444); }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <h1>🪶 FeatherScroll — Showcase <span id="count"></span></h1>
+      <div class="sub">Tất cả hiệu ứng chạy đồng thời (autoplay tạm dừng khi ngoài màn hình). Bấm <b>tweak →</b> để mở trong Playground. · <a href="../">← demo</a> · <a href="../playground/">Playground</a></div>
+    </div>
+    <div class="wrap" id="wrap"></div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { effectGroups, effectNames } from '@feather-scroll/effects';
+
+      document.getElementById('count').textContent = `(${effectNames.length} hiệu ứng)`;
+      const wrap = document.getElementById('wrap');
+      const slidesHTML = [0,1,2,3].map((i) => `<div class="s g${i}">${i+1}</div>`).join('');
+
+      const toInit = [];
+      for (const [family, list] of Object.entries(effectGroups)) {
+        const h = document.createElement('h2');
+        h.textContent = `${family} — ${list.length}`;
+        wrap.appendChild(h);
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        for (const effect of list) {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="name"><b>${effect.name}</b><a href="../playground/?effect=${effect.name}">tweak →</a></div>
+            <div class="mini">${slidesHTML}</div>`;
+          grid.appendChild(card);
+          toInit.push({ el: card.querySelector('.mini'), effect });
+        }
+        wrap.appendChild(grid);
+      }
+
+      // Lazy-init each mini carousel only when it scrolls into view.
+      let delay = 1500;
+      const io = new IntersectionObserver((entries, obs) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const item = toInit.find((t) => t.el === e.target);
+          if (item && !item.done) {
+            item.done = true;
+            new Carousel(item.el, {
+              effect: item.effect,
+              loop: true,
+              autoplay: { delay: 1700 + ((delay += 70) % 900), pauseOnHover: true },
+              speed: 650,
+              easing: 'easeInOut',
+            });
+          }
+          obs.unobserve(e.target);
+        }
+      }, { rootMargin: '120px' });
+      toInit.forEach((t) => io.observe(t.el));
+    </script>
+  </body>
+</html>

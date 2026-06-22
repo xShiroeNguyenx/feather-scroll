@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — App showcase (cube)</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/effects": "/packages/effects/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #cube { max-width: 720px; margin: 0 auto; }
+      #cube .fs__viewport { height: 440px; border-radius: var(--radius); }
+      .screen {
+        height: 100%; color: #fff; display: flex; flex-direction: column;
+        justify-content: flex-end; gap: .4rem; padding: 2rem;
+      }
+      .screen .step { font-size: .8rem; font-weight: 700; opacity: .85; letter-spacing: .1em; text-transform: uppercase; }
+      .screen h2 { margin: 0; font-size: 1.9rem; font-weight: 800; }
+      .screen p { margin: 0; opacity: .9; max-width: 34ch; }
+      .s0 { background: linear-gradient(160deg,#4f46e5,#7c3aed); }
+      .s1 { background: linear-gradient(160deg,#0ea5e9,#0891b2); }
+      .s2 { background: linear-gradient(160deg,#10b981,#059669); }
+      .s3 { background: linear-gradient(160deg,#f59e0b,#d97706); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🧊 App showcase (cube)</h1>
+        <p class="lead">Giới thiệu các bước/tính năng bằng hiệu ứng cube 3D — kiểu onboarding của app.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">cubeHorizontal effect</span><span class="tag">loop</span>
+          <span class="tag">dots</span><span class="tag">nav</span><span class="tag">autoplay</span><span class="tag">drag</span>
+        </div>
+      </div>
+
+      <div id="cube">
+        <div class="screen s0"><span class="step">Bước 1</span><h2>Tạo tài khoản</h2><p>Đăng ký nhanh chỉ với email, không cần thẻ.</p></div>
+        <div class="screen s1"><span class="step">Bước 2</span><h2>Kết nối dữ liệu</h2><p>Đồng bộ trong vài cú nhấp, an toàn và tức thì.</p></div>
+        <div class="screen s2"><span class="step">Bước 3</span><h2>Tùy biến bảng điều khiển</h2><p>Kéo-thả widget theo đúng nhu cầu của bạn.</p></div>
+        <div class="screen s3"><span class="step">Bước 4</span><h2>Chia sẻ &amp; cộng tác</h2><p>Mời cả nhóm và làm việc cùng nhau theo thời gian thực.</p></div>
+      </div>
+
+      <p class="note">Hiệu ứng <code>cubeHorizontal</code> import lẻ từ <code>@feather-scroll/effects</code> (tree-shakeable). Slide là gradient CSS.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { cubeHorizontal } from '@feather-scroll/effects';
+
+      new Carousel('#cube', {
+        effect: cubeHorizontal,
+        loop: true, nav: true, dots: true, drag: true,
+        speed: 600, easing: 'easeInOut',
+        autoplay: { delay: 3500, pauseOnHover: true },
+      });
+    </script>
+  </body>
+</html>

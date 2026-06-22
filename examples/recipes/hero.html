@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Hero banner</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      { "imports": { "@feather-scroll/core": "/packages/core/dist/index.js" } }
+    </script>
+    <style>
+      #hero { border-radius: var(--radius); overflow: hidden; }
+      #hero .fs__viewport { height: 440px; border-radius: var(--radius); }
+      #hero .fs__dots { position: absolute; left: 0; right: 0; bottom: 16px; margin: 0; }
+      #hero .fs__dot { background: rgba(255,255,255,.55); }
+      #hero .fs__dot.is-active { background: #fff; }
+
+      .hero-slide {
+        height: 100%; padding: 2.5rem 3rem; color: #fff;
+        display: flex; flex-direction: column; justify-content: center; gap: .9rem;
+      }
+      .hero-slide .eyebrow {
+        font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+        opacity: .9;
+      }
+      .hero-slide h2 { font-size: 2.4rem; line-height: 1.1; margin: 0; max-width: 16ch; font-weight: 800; }
+      .hero-slide p { margin: 0; max-width: 42ch; opacity: .92; font-size: 1.05rem; }
+      .hero-slide .cta {
+        align-self: flex-start; margin-top: .6rem;
+        background: #fff; color: #15181d; font-weight: 700; text-decoration: none;
+        padding: .65rem 1.3rem; border-radius: 999px; font-size: .95rem;
+      }
+      .h0 { background: linear-gradient(120deg, #4f46e5, #9333ea); }
+      .h1 { background: linear-gradient(120deg, #0ea5e9, #14b8a6); }
+      .h2 { background: linear-gradient(120deg, #f59e0b, #ef4444); }
+      .h3 { background: linear-gradient(120deg, #ec4899, #8b5cf6); }
+      @media (max-width: 640px) {
+        #hero .fs__viewport { height: 360px; }
+        .hero-slide { padding: 1.6rem 1.6rem; }
+        .hero-slide h2 { font-size: 1.7rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🖼️ Hero banner</h1>
+        <p class="lead">Slider đầu trang toàn chiều rộng: mỗi cảnh có tiêu đề và nút kêu gọi hành động, chuyển bằng hiệu ứng mờ dần.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">fade effect</span><span class="tag">loop</span>
+          <span class="tag">autoplay</span><span class="tag">dots</span><span class="tag">nav</span><span class="tag">a11y</span>
+        </div>
+      </div>
+
+      <div id="hero">
+        <div class="hero-slide h0">
+          <span class="eyebrow">Nhẹ như lông vũ</span>
+          <h2>Carousel không cần jQuery</h2>
+          <p>Zero-dependency, tree-shakeable, chỉ tải đúng phần bạn dùng.</p>
+          <a class="cta" href="#">Bắt đầu →</a>
+        </div>
+        <div class="hero-slide h1">
+          <span class="eyebrow">Mượt &amp; nhanh</span>
+          <h2>60fps khi kéo trên mobile</h2>
+          <p>Chỉ animate transform/opacity, có quản lý will-change.</p>
+          <a class="cta" href="#">Xem hiệu năng →</a>
+        </div>
+        <div class="hero-slide h2">
+          <span class="eyebrow">105 hiệu ứng</span>
+          <h2>Thư viện hiệu ứng layout</h2>
+          <p>Slide, fade, coverflow, cube, tiles… chọn theo gu của bạn.</p>
+          <a class="cta" href="#">Xem showcase →</a>
+        </div>
+        <div class="hero-slide h3">
+          <span class="eyebrow">Mọi framework</span>
+          <h2>React · Vue · Svelte · Web Component</h2>
+          <p>Lõi vanilla, wrapper mỏng, SSR-safe.</p>
+          <a class="cta" href="#">Tài liệu →</a>
+        </div>
+      </div>
+
+      <p class="note">Slide là nền gradient dựng bằng CSS (không tải ảnh). Hiệu ứng <code>fade</code> được export sẵn từ <code>@feather-scroll/core</code>.</p>
+    </div>
+
+    <script type="module">
+      import Carousel, { fade } from '@feather-scroll/core';
+
+      new Carousel('#hero', {
+        effect: fade,
+        loop: true,
+        nav: true,
+        dots: true,
+        speed: 700,
+        easing: 'easeInOut',
+        autoplay: { delay: 4000, pauseOnHover: true },
+      });
+    </script>
+  </body>
+</html>

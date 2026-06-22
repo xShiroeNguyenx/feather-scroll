@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Testimonials</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      { "imports": { "@feather-scroll/core": "/packages/core/dist/index.js" } }
+    </script>
+    <style>
+      #t { padding: 0 4px; }
+      #t .fs__viewport { height: 240px; }
+      #t .fs__nav--prev { left: -8px; }
+      #t .fs__nav--next { right: -8px; }
+
+      .tcard {
+        height: 100%;
+        background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+        padding: 1.2rem 1.3rem; display: flex; flex-direction: column; gap: .7rem;
+      }
+      .tcard .top { display: flex; align-items: center; gap: .7rem; }
+      .tcard .avatar {
+        width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+        display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 1rem;
+      }
+      .tcard .who .name { font-weight: 700; }
+      .tcard .who .role { color: var(--muted); font-size: .82rem; }
+      .tcard .stars { color: var(--star); letter-spacing: 1px; }
+      .tcard .quote {
+        color: #374151; font-size: .92rem; margin: 0;
+        display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>💬 Testimonials</h1>
+        <p class="lead">Khối đánh giá hiển thị nhiều card cùng lúc, tự chạy và kéo được — đúng dạng dùng trên landing page.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">slide (track)</span><span class="tag">responsive items 1→2→3</span>
+          <span class="tag">loop</span><span class="tag">autoplay + pauseOnHover</span><span class="tag">nav</span><span class="tag">drag</span>
+        </div>
+      </div>
+
+      <div id="t"></div>
+
+      <p class="note">Avatar là chữ cái dựng bằng CSS (không tải ảnh ngoài). Đổi <code>items</code> trong <code>responsive</code> để thay số card/hàng.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+
+      const data = [
+        { name: 'Mai Anh',   role: 'Freelance Designer', stars: 5, quote: 'Cài đặt trong vài phút, gọn nhẹ và mượt. Đúng thứ tôi cần mà không phải kéo theo cả đống thư viện.' },
+        { name: 'Trí Dũng',  role: 'Frontend Lead',      stars: 5, quote: 'Bundle nhỏ hơn hẳn giải pháp cũ, kéo/swipe trên mobile rất nhạy. Đội mình chuyển sang dùng luôn.' },
+        { name: 'Lan Phương',role: 'Product Manager',    stars: 5, quote: 'Trải nghiệm trên điện thoại tốt, responsive đúng như mong đợi, không giật khi chuyển.' },
+        { name: 'Hoàng Nam', role: 'Indie Hacker',       stars: 5, quote: 'API trực quan, đọc là hiểu. Mình dựng xong khối review chỉ trong một buổi tối.' },
+        { name: 'Thu Hà',    role: 'UX Researcher',      stars: 4, quote: 'Hỗ trợ bàn phím và ARIA sẵn nên phần kiểm thử khả năng tiếp cận nhẹ đi đáng kể.' },
+        { name: 'Quốc Bảo',  role: 'Fullstack Dev',      stars: 5, quote: 'Không phụ thuộc framework nên cắm vào dự án nào cũng được, kể cả trang tĩnh.' },
+        { name: 'Diệu Linh', role: 'Marketing Lead',     stars: 5, quote: 'Tự chạy và dừng khi rê chuột vào, người dùng đọc kịp nội dung — chi tiết nhỏ mà rất được việc.' },
+        { name: 'Anh Khoa',  role: 'Startup Founder',    stars: 5, quote: 'Hiệu năng tốt, mở nhiều carousel trên một trang vẫn nhẹ. Rất hài lòng.' },
+      ];
+
+      const palette = ['#6366f1','#ec4899','#14b8a6','#f59e0b','#0ea5e9','#a855f7','#ef4444','#10b981'];
+      const initials = (n) => n.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+
+      const card = (t, i) => `
+        <article class="tcard">
+          <div class="top">
+            <div class="avatar" style="background:${palette[i % palette.length]}">${initials(t.name)}</div>
+            <div class="who">
+              <div class="name">${t.name}</div>
+              <div class="role">${t.role}</div>
+            </div>
+          </div>
+          <div class="stars">${'★'.repeat(t.stars)}${'☆'.repeat(5 - t.stars)}</div>
+          <p class="quote">“${t.quote}”</p>
+        </article>`;
+
+      const root = document.getElementById('t');
+      root.innerHTML = data.map(card).join('');
+
+      new Carousel('#t', {
+        items: 1, gap: 16, loop: true, drag: true, nav: true, dots: false,
+        speed: 500, easing: 'easeOut',
+        autoplay: { delay: 4000, pauseOnHover: true },
+        responsive: { 640: { items: 2 }, 1024: { items: 3 } },
+      });
+    </script>
+  </body>
+</html>

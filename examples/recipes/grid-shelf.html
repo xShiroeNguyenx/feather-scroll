@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe — Grid shelf (multi-row)</title>
+    <link rel="stylesheet" href="/packages/core/styles/core.css" />
+    <link rel="stylesheet" href="./recipe.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@feather-scroll/core": "/packages/core/dist/index.js",
+          "@feather-scroll/plugins": "/packages/plugins/dist/index.js",
+          "@feather-scroll/presets": "/packages/presets/dist/index.js"
+        }
+      }
+    </script>
+    <style>
+      #grid { padding: 0 4px; }
+      #grid .fs__viewport { height: 420px; }
+      #grid .fs__nav--prev { left: -8px; }
+      #grid .fs__nav--next { right: -8px; }
+      .pcard {
+        height: 100%; background: var(--card); border: 1px solid var(--line);
+        border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column;
+      }
+      .pcard .thumb { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; font-size: 2.2rem; }
+      .pcard .body { padding: .6rem .8rem .8rem; }
+      .pcard .name { font-weight: 700; font-size: .85rem; }
+      .pcard .price { font-weight: 800; font-size: .95rem; margin-top: .15rem; }
+      .g0 { background: linear-gradient(135deg,#eef2ff,#c7d2fe); }
+      .g1 { background: linear-gradient(135deg,#fef3c7,#fcd34d); }
+      .g2 { background: linear-gradient(135deg,#dcfce7,#86efac); }
+      .g3 { background: linear-gradient(135deg,#fce7f3,#f9a8d4); }
+      .g4 { background: linear-gradient(135deg,#e0f2fe,#7dd3fc); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="recipe-head">
+        <a class="back" href="./">← Recipes</a>
+        <h1>🔲 Grid shelf (nhiều hàng)</h1>
+        <p class="lead">Lưới sản phẩm <b>2 hàng</b>, mỗi lần bấm nhảy đúng một cột màn hình — như khối “Danh mục nổi bật” nhiều dòng.</p>
+        <div class="combo"><span class="lbl">Kết hợp:</span>
+          <span class="tag">preset gridShelf</span><span class="tag">grid: { rows: 2 }</span>
+          <span class="tag">slideBy: 'page'</span><span class="tag">nav</span><span class="tag">drag</span>
+        </div>
+      </div>
+
+      <div id="grid"></div>
+
+      <p class="note">Đổi số hàng bằng <code>gridShelf({ rows: 3 })</code>. Grid dùng layout track + flex column-wrap, vẫn chỉ một transform GPU.</p>
+    </div>
+
+    <script type="module">
+      import Carousel from '@feather-scroll/core';
+      import { gridShelf } from '@feather-scroll/presets';
+
+      const icons = ['🎧','⌨️','🖱️','🔊','📷','💡','💻','💾','🔌','🎮','🖥️','📱','⌚','🎤','🕹️','📦','🧯','🔋','📡','🧰'];
+      const root = document.getElementById('grid');
+      root.innerHTML = icons
+        .map((ic, i) => `
+          <article class="pcard">
+            <div class="thumb g${i % 5}">${ic}</div>
+            <div class="body">
+              <div class="name">Sản phẩm ${i + 1}</div>
+              <div class="price">${(199 + i * 30)}.000₫</div>
+            </div>
+          </article>`)
+        .join('');
+
+      new Carousel('#grid', gridShelf({ rows: 2, gap: 14 }));
+    </script>
+  </body>
+</html>
