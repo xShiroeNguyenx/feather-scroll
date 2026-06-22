@@ -1,0 +1,83 @@
+name: Deploy demos to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Cho phép 1 lần deploy chạy tại một thời điểm; không hủy lần đang chạy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # pnpm version đọc từ "packageManager" trong package.json
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      - name: Assemble static site
+        env:
+          BASE: ${{ github.event.repository.name }}
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site/examples
+
+          # Giữ nguyên cấu trúc lồng examples/<demo>/ để đường dẫn tương đối "../../packages" còn đúng.
+          cp -r examples/. _site/examples/
+
+          # Chỉ mang theo dist + styles của các package mà demo thực sự import.
+          for p in core effects plugins presets; do
+            if [ -d "packages/$p/dist" ]; then
+              mkdir -p "_site/packages/$p/dist"
+              cp -r "packages/$p/dist/." "_site/packages/$p/dist/"
+            fi
+          done
+          mkdir -p _site/packages/core/styles
+          cp packages/core/styles/core.css _site/packages/core/styles/
+
+          # Pages phục vụ site dưới base "/$BASE/". Đường dẫn TUYỆT ĐỐI "/packages/..."
+          # (trong importmap và href) phải thêm tiền tố base; đường dẫn tương đối
+          # "../../packages/" không khớp mẫu nên giữ nguyên.
+          find _site/examples -name '*.html' -print0 | xargs -0 sed -i \
+            -e "s#\"/packages/#\"/$BASE/packages/#g" \
+            -e "s#'/packages/#'/$BASE/packages/#g"
+
+          # Trang gốc redirect sang hub demo.
+          printf '%s\n' \
+            '<!doctype html><meta charset="utf-8">' \
+            '<title>FeatherScroll — Demos</title>' \
+            '<meta http-equiv="refresh" content="0; url=./examples/">' \
+            '<link rel="canonical" href="./examples/">' \
+            '<p>Đang chuyển tới <a href="./examples/">FeatherScroll Demos</a>…</p>' \
+            > _site/index.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
